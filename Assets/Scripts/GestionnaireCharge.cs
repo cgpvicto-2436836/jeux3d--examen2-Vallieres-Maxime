@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -8,8 +9,12 @@ public class GestionnaireCharge : MonoBehaviour
     [SerializeField, Tooltip("Référence aux objets de charge que le joueur peut utiliser.")]
     private GameObject[] objetsCharge;
 
+   
+
     // Le nombre de charges disponibles pour le joueur.
     private int nombreCharges;
+
+    
 
     public void AjouterCharge()
     {

@@ -14,6 +14,12 @@ public class Boule : MonoBehaviour
     [SerializeField, Tooltip("Référence au gestionnaire de charge pour gérer les charges d'accélération.")]
     private GestionnaireCharge gestionnaireCharge;
 
+    [SerializeField, Tooltip("Gestion des Surfaces")]
+    private Surface surface;
+
+    [SerializeField, Tooltip("Référence au gestionnaire de charge pour gérer les charges d'accélération.")]
+    private GestionPiece gestionPiece;
+
     [SerializeField, Tooltip("Force de déplacement de la boule.")]
     private float forceDeplacement;
 
@@ -59,6 +65,8 @@ public class Boule : MonoBehaviour
         controles.actions.FindAction("Diriger").performed -= CommencerDirection;
         controles.actions.FindAction("Diriger").canceled -= ArreterDirection;
         controles.actions.FindAction("Accelerer").performed -= UtiliserChargeAcceleration;
+        controles.actions.FindAction("Pause").performed -= UtiliserPause;
+
     }
 
     /// <summary>
@@ -73,7 +81,12 @@ public class Boule : MonoBehaviour
         controles.actions.FindAction("Diriger").performed += CommencerDirection;
         controles.actions.FindAction("Diriger").canceled += ArreterDirection;
         controles.actions.FindAction("Accelerer").performed += UtiliserChargeAcceleration;
+
+        controles.actions.FindAction("Pause").performed += UtiliserPause;
+
         controles.actions.FindAction("Commencer").performed -= CommencerJeu;
+
+
 
         rigidbody.useGravity = true;
     }
@@ -114,6 +127,7 @@ public class Boule : MonoBehaviour
         gestionnaireCharge.AjouterCharge();
     }
 
+
     private void UtiliserChargeAcceleration(InputAction.CallbackContext contexte)
     {
         if (!enAcceleration && gestionnaireCharge.UtiliserCharge())
@@ -121,6 +135,20 @@ public class Boule : MonoBehaviour
             StartCoroutine(AppliquerAcceleration());
         }
     }
+
+    public void AjoutePiece()
+    {
+        gestionPiece.AjouterPiece();
+    }
+
+   private void UtiliserPause(InputAction.CallbackContext contexte)
+    {
+        if (gestionPiece.UtiliserPiece() == true)
+        {
+            StartCoroutine(surface.ActivationPause());
+        }
+    }
+
 
     private IEnumerator AppliquerAcceleration()
     {

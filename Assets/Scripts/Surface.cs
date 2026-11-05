@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(DetecteurBoule))]
@@ -10,6 +11,12 @@ public class Surface : MonoBehaviour
 
     [SerializeField, Tooltip("Positions de génération des objets sur la surface.")]
     private Vector3[] positionGeneration;
+
+    [SerializeField, Tooltip("Animation")]
+    Animator animator;
+
+    private float dureePause = 5f;
+
 
     private void Awake()
     {
@@ -43,4 +50,18 @@ public class Surface : MonoBehaviour
             Gizmos.DrawSphere(transform.position + position, 0.2f);
         }
     }
+
+    public IEnumerator ActivationPause()
+    {
+        animator.SetBool("PauseActif", true);
+
+        float tempsEcoule = 0.0f;
+        while (tempsEcoule < dureePause)
+        {
+            tempsEcoule += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        animator.SetBool("PauseActif", true);
+    }
 }
+
